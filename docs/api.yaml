@@ -42,14 +42,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserLogin'
+              $ref: '#/components/schemas/UserLoginRequest'
       responses:
         200:
           description: Successful login.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserLoginResponse'
         400:
           description: Bad request, username or password missing.
           content:
@@ -93,7 +93,7 @@ components:
           type: string
           description: The user's password.
           example: '123456'
-    UserLogin:
+    UserLoginRequest:
       type: object
       required:
         - username
@@ -107,6 +107,15 @@ components:
           type: string
           description: The user's password.
           example: '123456'
+    UserLoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The authentication token.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          $ref: '#/components/schemas/User'
     Error:
       type: object
       properties:

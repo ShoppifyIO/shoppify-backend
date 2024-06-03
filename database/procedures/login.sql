@@ -3,17 +3,24 @@ create or replace function
         p_username varchar,
         p_password varchar
     )
-returns void as $$
+returns table(
+    v_user_id integer,
+    v_username varchar,
+    v_email varchar
+) as $$
 declare
     v_password_hash text;
 begin
-    v_password_hash := crypt(p_password, gen_salt('bf'));
+    select id, username, email, password_hash into v_user_id, v_username, v_email, v_password_hash
+    from users
+    where username = p_username;
 
-    if not exists(select 1 from users where username = p_username and password_hash = v_password_hash) then
+    if v_user_id is null or v_password_hash != crypt(p_password, v_password_hash) then
         perform throw.username_or_password_incorrect();
     end if;
 
-    raise notice 'User can be logged in';
+    return query
+    select v_user_id, v_username, v_email;
 end;
 $$ language plpgsql;
 

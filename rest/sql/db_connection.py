@@ -1,15 +1,9 @@
-from enum import Enum
-from typing import Set, List, Any
+from typing import Set, List, Any, Tuple
 import psycopg2
 from rest.common.exceptions.sql_exception import SqlException
-
+from rest.sql.proc_return_type import ProcReturnType
 
 custom_error_letters: Set[str] = {'U'}
-
-
-class ProcReturnType(Enum):
-    NONE = "None"
-    ID = "ID"
 
 
 class DBConnection:
@@ -28,8 +22,8 @@ class DBConnection:
             self,
             procname: str,
             proc_params: List[Any],
-            return_type: ProcReturnType = ProcReturnType.NONE
-    ) -> int | None:
+            return_type: ProcReturnType
+    ) -> Tuple[Any] | int | None:
         conn = self.__create_connection()
         cur = conn.cursor()
 
@@ -40,6 +34,9 @@ class DBConnection:
 
             if return_type == ProcReturnType.ID:
                 return result[0]
+
+            if return_type == ProcReturnType.TABLE:
+                return result
 
             return None
         except psycopg2.Error as e:
@@ -58,5 +55,7 @@ class DBConnection:
     @staticmethod
     def __handle_db_exception(e):
         if e.pgcode[0] not in custom_error_letters:
+            print('Unknown Error', e)
             raise e
+        print('Custom Error', e)
         raise SqlException(e.pgerror)
