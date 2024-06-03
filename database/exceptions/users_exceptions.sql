@@ -25,3 +25,7 @@ $$ language plpgsql;
 create or replace function throw.username_or_password_incorrect() returns void AS $$
 begin raise exception 'Username or password is incorrect' using errcode = 'U0007'; end;
 $$ language plpgsql;
+
+create or replace function throw.user_not_found() returns void as $$
+begin raise exception 'Nie znaleziono podanego użytkownika' using errcode = 'U0008'; end;
+$$ language plpgsql;

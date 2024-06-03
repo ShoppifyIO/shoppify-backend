@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: Login API
+  title: ShoppifyIO API
   version: 1.0.0
-  description: API for user authentication.
+  description: API for ShoppifyIO.
 
 servers:
   - url: 'http://127.0.0.1:5000'
@@ -18,29 +18,103 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - username
-                - email
-                - password
-              properties:
-                username:
-                  type: string
-                  description: The user's username.
-                  example: johndoe
-                email:
-                  type: string
-                  description: The user's email address.
-                  example: johndoe@example.com
-                password:
-                  type: string
-                  description: The user's password.
-                  example: '123456'
-              additionalProperties: false
+              $ref: '#/components/schemas/RegisterUser'
       responses:
         201:
           description: User successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         400:
           description: Bad request, one or more parameters are empty or missing.
-        500:
-          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /login:
+    post:
+      summary: User login.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        200:
+          description: Successful login.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Bad request, username or password missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The user's ID.
+          example: 1
+        username:
+          type: string
+          description: The user's username.
+          example: johndoe
+        email:
+          type: string
+          description: The user's email address.
+          example: johndoe@example.com
+    RegisterUser:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          description: The user's username.
+          example: johndoe
+        email:
+          type: string
+          description: The user's email address.
+          example: johndoe@example.com
+        password:
+          type: string
+          description: The user's password.
+          example: '123456'
+    UserLogin:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: The user's username.
+          example: johndoe
+        password:
+          type: string
+          description: The user's password.
+          example: '123456'
+    Error:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The error ID.
+          example: 4001
+        message:
+          type: string
+          description: The error message.
+          example: One or more parameters are empty or missing.

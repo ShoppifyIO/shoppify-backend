@@ -33,6 +33,6 @@ def login() -> Response:
         username: str = extractor.str_required('username')
         password: str = extractor.str_required('password')
 
-        login_user(username, password)
+        # login_user(username, password)
     except AbstractException as abstract_exception:
         return abstract_exception.to_response()

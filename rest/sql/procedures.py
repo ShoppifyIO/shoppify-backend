@@ -23,14 +23,13 @@ def add_user(username: str, email: str, password: str) -> None:
 
     # Example function call
     try:
-        # Prepare a query string to execute a function
-        # Replace 'get_varchar_max_length' with your function name
-        # and 'users', 'username' with your specific parameters
         cur.callproc('add_user', [username, email, password])
 
         # Retrieve the result
         result = cur.fetchone()
         print(result)
+
+        conn.commit()
 
     except psycopg2.Error as e:
         if e.pgcode[0] not in custom_error_letters:

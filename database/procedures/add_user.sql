@@ -1,8 +1,8 @@
 create or replace function
     add_user(
-        p_username varchar,
-        p_email varchar,
-        p_password varchar
+        p_username text,
+        p_email text,
+        p_password text
     )
 returns void as $$
 declare
@@ -41,7 +41,7 @@ begin
 end
 $$ language plpgsql;
 
-comment on function add_user(varchar, varchar, varchar) is
+comment on function add_user(text, text, text) is
 'Możliwe wyjątki:
 - U001 - Username already taken
 - U002 - Email already taken
