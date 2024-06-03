@@ -4,9 +4,10 @@ create or replace function
         p_email text,
         p_password text
     )
-returns void as $$
+returns integer as $$
 declare
     v_password_hash text;
+    v_user_id integer;
 begin
     if p_username is null or p_username = '' then
         perform throw.empty_username();
@@ -35,9 +36,12 @@ begin
     v_password_hash := crypt(p_password, gen_salt('bf'));
 
     insert into users(username, email, password_hash, is_active)
-    values (p_username, p_email, v_password_hash, true);
+    values (p_username, p_email, v_password_hash, true)
+    returning id into v_user_id;
 
     raise notice 'User added successfully';
+
+    return v_user_id;
 end
 $$ language plpgsql;
 

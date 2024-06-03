@@ -3,7 +3,8 @@ from flask import Blueprint, Response, request
 from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
 from rest.common.response import respond_created
-from rest.sql.procedures import add_user
+from rest.sql.db_connection import ProcReturnType, DBConnection
+from rest.sql.db_repository import get_db_connection
 
 
 user_blueprint = Blueprint('user', __name__)
@@ -18,9 +19,18 @@ def register() -> Response:
         email: str = extractor.str_required('email')
         password: str = extractor.str_required('password')
 
-        add_user(username, email, password)
+        conn: DBConnection = get_db_connection()
+        user_id = conn.call_procedure(
+            'add_user',
+            [username, email, password],
+            ProcReturnType.ID
+        )
 
-        return respond_created()
+        return respond_created({
+            'id': user_id,
+            'username': username,
+            'email': email
+        })
     except AbstractException as abstract_exception:
         return abstract_exception.to_response()
 

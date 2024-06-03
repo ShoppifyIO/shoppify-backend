@@ -15,7 +15,7 @@ class AbstractException(Exception, ABC):
 
     def to_response(self) -> Response:
         return Response(
-            response=json.dumps({'error': self.message}),
+            response=json.dumps({'error': self.message}, default=str),
             status=self.status,
             mimetype='application/json'
         )

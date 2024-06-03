@@ -110,11 +110,7 @@ components:
     Error:
       type: object
       properties:
-        id:
-          type: integer
-          description: The error ID.
-          example: 4001
-        message:
+        error:
           type: string
           description: The error message.
           example: One or more parameters are empty or missing.

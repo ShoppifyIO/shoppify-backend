@@ -4,8 +4,8 @@ from typing import Dict
 from flask import Response
 
 
-def respond_created() -> Response:
-    return respond(None, 201)
+def respond_created(data: Dict[str, any] | str | None,) -> Response:
+    return respond(data, 201)
 
 
 def respond(
