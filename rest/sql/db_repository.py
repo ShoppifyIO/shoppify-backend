@@ -15,12 +15,12 @@ def get_db_connection() -> DBConnection:
 
 
 def call_procedure(
-    procname: str,
+    proc_name: str,
     proc_params: List[Any],
     return_type: ProcReturnType
 ) -> Tuple[Any] | int | None:
     conn: DBConnection = get_db_connection()
-    return conn.call_procedure(procname, proc_params, return_type)
+    return conn.call_procedure(proc_name, proc_params, return_type)
 
 
 def call_query(
