@@ -1,15 +1,17 @@
 import json
-from typing import Dict
+from typing import Dict, Any, List, Union
 
 from flask import Response
 
+JsonType = List[Dict[str, Any]] | Dict[str, Any] | str | None
 
-def respond_created(data: Dict[str, any] | str | None,) -> Response:
+
+def respond_created(data: JsonType) -> Response:
     return respond(data, 201)
 
 
 def respond(
-        data: Dict[str, any] | str | None,
+        data: JsonType,
         status: int,
         mimetype: str = 'application/json'
 ) -> Response:

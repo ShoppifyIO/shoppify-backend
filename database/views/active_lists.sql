@@ -13,9 +13,9 @@ SELECT
     END AS is_user_owner                  -- Czy użytkownik jest właścicielem (1) lub nie (0)
 FROM
     shopping_lists sl
-JOIN
+LEFT JOIN
     categories c ON sl.category_id = c.id
-JOIN
+LEFT JOIN
     users u ON sl.updated_by = u.id
 LEFT JOIN
     list_sharings ls ON sl.id = ls.shopping_list_id

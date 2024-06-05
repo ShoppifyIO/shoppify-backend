@@ -89,6 +89,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /shopping-list/active:
+    get:
+      summary: Get active shopping lists.
+      operationId: getActiveShoppingLists
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Successfully retrieved active shopping lists.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShoppingListHeader'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     JWT:
@@ -197,6 +225,42 @@ components:
           example: false
         category:
           $ref: '#/components/schemas/Category'
+    ShoppingListHeader:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the shopping list.
+          example: 1
+        title:
+          type: string
+          description: The title of the shopping list.
+          example: "Groceries"
+        update_date:
+          type: string
+          format: date-time
+          description: The last update date of the shopping list.
+          example: "2023-06-03T12:00:00Z"
+        updated_by:
+          type: integer
+          description: The ID of the user who last updated the shopping list.
+          example: 2
+        category_name:
+          type: string
+          description: The name of the category.
+          example: "Food"
+        category_color:
+          type: string
+          description: The color associated with the category.
+          example: "#FF5733"
+        user_id:
+          type: integer
+          description: The ID of the user.
+          example: 1
+        is_user_owner:
+          type: boolean
+          description: Whether the user is the owner of the shopping list.
+          example: true
     Category:
       type: object
       properties:
