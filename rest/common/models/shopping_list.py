@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Tuple, Any, Dict
+from typing import Any, Dict
 
 from psycopg2.extras import RealDictRow
 
