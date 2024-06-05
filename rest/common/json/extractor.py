@@ -13,7 +13,7 @@ class Extractor:
     def str_required(self, param_name: str) -> str:
         try:
             param = self.dictionary.get(param_name)
-            Extractor.__ensure_is_str(param)
+            Extractor.__ensure_is_str(param_name, param)
             return param
         except KeyError:
             raise MissingParamException(param_name)
@@ -21,7 +21,7 @@ class Extractor:
     def str_optional(self, param_name: str, default: str | None = None) -> str | None:
         try:
             param = self.dictionary.get(param_name)
-            Extractor.__ensure_is_str(param)
+            Extractor.__ensure_is_str(param_name, param, True)
             return param
         except KeyError:
             return default
@@ -29,7 +29,7 @@ class Extractor:
     def int_required(self, param_name: str) -> int:
         try:
             param = self.dictionary.get(param_name)
-            Extractor.__ensure_is_int(param)
+            Extractor.__ensure_is_int(param_name, param)
             return param
         except KeyError:
             raise MissingParamException(param_name)
@@ -37,17 +37,23 @@ class Extractor:
     def int_optional(self, param_name: str, default: int | None = None) -> int | None:
         try:
             param = self.dictionary.get(param_name)
-            Extractor.__ensure_is_int(param)
+            Extractor.__ensure_is_int(param_name, param, True)
             return param
         except KeyError:
             return default
 
     @staticmethod
-    def __ensure_is_str(param: any) -> None:
+    def __ensure_is_str(param_name: str, param: any, none_allowed: bool = False) -> None:
+        if param is None and none_allowed:
+            return
+
         if not isinstance(param, str):
-            raise BadParamTypeException(param)
+            raise BadParamTypeException(param_name)
 
     @staticmethod
-    def __ensure_is_int(param: any) -> None:
+    def __ensure_is_int(param_name: str, param: any, none_allowed: bool = False) -> None:
+        if param is None and none_allowed:
+            return
+
         if not isinstance(param, int):
-            raise BadParamTypeException(param)
+            raise BadParamTypeException(param_name)

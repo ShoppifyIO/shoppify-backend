@@ -1,6 +1,9 @@
 from datetime import datetime
 from typing import Tuple, Any, Dict
 
+from psycopg2.extras import RealDictRow
+
+from rest.common.dates import datetime_to_string
 from rest.common.exceptions.not_found_exception import NotFoundException
 from rest.sql.db_repository import call_query
 
@@ -24,15 +27,15 @@ class ShoppingList:
             'id': self.id,
             'owner_id': self.owner_id,
             'title': self.title,
-            'creation_date': self.creation_date,
-            'update_date': self.update_date,
+            'creation_date': datetime_to_string(self.creation_date),
+            'update_date': datetime_to_string(self.update_date),
             'updated_by': self.updated_by,
             'is_completed': self.is_completed,
             'category': None
         }
 
     def __load_db(self) -> None:
-        row: Tuple[Any, ...] | None = call_query(
+        row: RealDictRow | None = call_query(
             'SELECT * FROM shopping_lists WHERE id = %s',
             (self.id,)
         )
@@ -40,4 +43,10 @@ class ShoppingList:
         if row is None:
             raise NotFoundException('listy zakupów', self.id)
 
-        print(row)
+        self.owner_id = row['owner_id']
+        self.category_id = row['category_id']
+        self.title = row['title']
+        self.creation_date = row['creation_date']
+        self.update_date = row['update_date']
+        self.updated_by = row['updated_by']
+        self.is_completed = row['is_completed']

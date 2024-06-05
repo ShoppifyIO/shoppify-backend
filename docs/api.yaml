@@ -57,10 +57,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /shopping-lists/add:
+  /shopping-list/add:
     post:
       summary: Add new shopping list.
       operationId: addShoppingList
+      security:
+        - JWT: []
       requestBody:
         required: true
         content:
@@ -88,6 +90,11 @@ paths:
                 $ref: '#/components/schemas/Error'
 
 components:
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: token
   schemas:
     User:
       type: object

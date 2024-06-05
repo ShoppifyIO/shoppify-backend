@@ -1,5 +1,7 @@
 from typing import List, Any, Tuple
 
+from psycopg2.extras import RealDictRow
+
 from rest.sql.db_connection import DBConnection
 from rest.sql.proc_return_type import ProcReturnType
 from rest.sql.query_return_type import QueryReturnType
@@ -27,6 +29,6 @@ def call_query(
         query: str,
         params: Tuple[Any],
         return_type: QueryReturnType = QueryReturnType.ROW
-) -> list[tuple[Any, ...]] | type[Any, ...] | None:
+) -> None | RealDictRow | list[RealDictRow]:
     conn: DBConnection = get_db_connection()
     return conn.call_query(query, params, return_type)

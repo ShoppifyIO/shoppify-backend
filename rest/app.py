@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
+
+from rest.blueprints.shopping_list import shopping_list_blueprint
 from rest.blueprints.user import user_blueprint
 
 
@@ -11,5 +13,6 @@ def create_app() -> Flask:
     CORS(app)
 
     app.register_blueprint(user_blueprint, url_prefix='')
+    app.register_blueprint(shopping_list_blueprint, url_prefix='/shopping-list')
 
     return app

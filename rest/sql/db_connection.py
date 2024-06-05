@@ -1,5 +1,7 @@
 from typing import Set, List, Any, Tuple
 import psycopg2
+from psycopg2.extras import RealDictCursor, RealDictRow
+
 from rest.common.exceptions.sql_exception import SqlException
 from rest.sql.proc_return_type import ProcReturnType
 from rest.sql.query_return_type import QueryReturnType
@@ -51,9 +53,9 @@ class DBConnection:
             query: str,
             params: Tuple[Any],
             query_return_type: QueryReturnType
-    ) -> list[tuple[Any, ...]] | tuple[Any, ...] | None:
+    ) -> None | RealDictRow | list[RealDictRow]:
         conn = self.__create_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
         try:
             cur.execute(query, params)
