@@ -2,6 +2,7 @@ from typing import Set, List, Any, Tuple
 import psycopg2
 from rest.common.exceptions.sql_exception import SqlException
 from rest.sql.proc_return_type import ProcReturnType
+from rest.sql.query_return_type import QueryReturnType
 
 custom_error_letters: Set[str] = {'U'}
 
@@ -39,6 +40,34 @@ class DBConnection:
                 return result
 
             return None
+        except psycopg2.Error as e:
+            self.__handle_db_exception(e)
+        finally:
+            cur.close()
+            conn.close()
+
+    def call_query(
+            self,
+            query: str,
+            params: Tuple[Any],
+            query_return_type: QueryReturnType
+    ) -> list[tuple[Any, ...]] | tuple[Any, ...] | None:
+        conn = self.__create_connection()
+        cur = conn.cursor()
+
+        try:
+            cur.execute(query, params)
+
+            if query_return_type == QueryReturnType.NONE:
+                return None
+
+            if query_return_type == QueryReturnType.ROW:
+                return cur.fetchone()
+
+            if query_return_type == QueryReturnType.LIST:
+                return cur.fetchall()
+
+            raise f'Unknown QueryReturnType: {query_return_type}'
         except psycopg2.Error as e:
             self.__handle_db_exception(e)
         finally:

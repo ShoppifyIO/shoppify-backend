@@ -2,6 +2,7 @@ from typing import List, Any, Tuple
 
 from rest.sql.db_connection import DBConnection
 from rest.sql.proc_return_type import ProcReturnType
+from rest.sql.query_return_type import QueryReturnType
 
 db_name = 'shoppify-db'
 db_user = 'postgres'
@@ -20,3 +21,12 @@ def call_procedure(
 ) -> Tuple[Any] | int | None:
     conn: DBConnection = get_db_connection()
     return conn.call_procedure(procname, proc_params, return_type)
+
+
+def call_query(
+        query: str,
+        params: Tuple[Any],
+        return_type: QueryReturnType = QueryReturnType.ROW
+) -> list[tuple[Any, ...]] | type[Any, ...] | None:
+    conn: DBConnection = get_db_connection()
+    return conn.call_query(query, params, return_type)
