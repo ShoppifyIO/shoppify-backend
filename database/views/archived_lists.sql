@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW active_shopping_lists AS
+CREATE OR REPLACE VIEW archived_lists AS
 SELECT
     sl.id AS shopping_list_id,            -- Identyfikator listy zakupów
     sl.title AS title,                    -- Tytuł listy zakupów
@@ -23,4 +23,4 @@ LEFT JOIN
 LEFT JOIN
     user_relationships ur ON ls.relationship_id = ur.id
 WHERE
-    sl.is_completed = false;
+    sl.is_completed = true;               -- Warunek, aby lista była zarchiwizowana (zakończona)

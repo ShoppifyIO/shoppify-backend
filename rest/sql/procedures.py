@@ -24,3 +24,12 @@ def db_add_shopping_list(owner_id: int, title: str, category_id: int) -> int:
         [owner_id, title, category_id],
         ProcReturnType.ID
     )
+
+
+def db_add_category(owner_id: int, cat_type: int, title: str, description: str, color: str) -> int:
+    return call_procedure(
+        'add_category',
+        [owner_id, cat_type, title, description, color],
+        ProcReturnType.ID
+    )
+
