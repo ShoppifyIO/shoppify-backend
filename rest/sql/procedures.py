@@ -16,3 +16,11 @@ def db_login(username: str, password: str) -> Dict[str, Any]:
         'username': user_tuple[1],
         'email': user_tuple[2]
     }
+
+
+def db_add_shopping_list(owner_id: int, title: str, category_id: int) -> int:
+    return call_procedure(
+        'add_shopping_list',
+        [owner_id, title, category_id],
+        ProcReturnType.ID
+    )
