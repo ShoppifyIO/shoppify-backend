@@ -522,15 +522,24 @@ components:
           type: string
           description: The title of the shopping list.
           example: "Groceries"
+        creation_date:
+          type: string
+          format: date-time
+          description: The date of creation of the shopping list.
+          example: "2023-06-03T12:00:00Z"
         update_date:
           type: string
           format: date-time
           description: The last update date of the shopping list.
           example: "2023-06-03T12:00:00Z"
         updated_by:
-          type: integer
-          description: The ID of the user who last updated the shopping list.
-          example: 2
+          type: string
+          description: The username of the user who last updated the shopping list.
+          example: "Mario"
+        owner_username:
+          type: string
+          description: The username of the owner of the list.
+          example: "Luigi"
         category_name:
           type: string
           description: The name of the category.

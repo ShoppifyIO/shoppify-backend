@@ -5,13 +5,11 @@ from flask import Blueprint, Response, request
 from rest.common.auth.token import handle_request_token
 from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
-from rest.common.models import shopping_list
 from rest.common.models.shopping_list_header import ShoppingListHeader
 from rest.common.models.shopping_list import ShoppingList
 from rest.common.response import respond_created, respond
 from rest.sql.operator.db_deleter import DBDeleter
 from rest.sql.operator.db_inserter import DBInserter
-from rest.sql.operator.db_operator import DBOperator
 from rest.sql.operator.db_updater import DBUpdater
 
 shopping_list_blueprint = Blueprint('shopping_list', __name__)
