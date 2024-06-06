@@ -17,6 +17,21 @@ from rest.sql.operator.db_updater import DBUpdater
 shopping_list_blueprint = Blueprint('shopping_list', __name__)
 
 
+@shopping_list_blueprint.route('/<shopping_list_id>', methods=['GET'])
+def get(shopping_list_id: int) -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+
+        ShoppingList.verify_authorisation(logged_user, shopping_list_id)
+
+        sl: ShoppingList = ShoppingList(shopping_list_id)
+
+        return respond(sl.to_dict_with_children(), 200)
+    except AbstractException as ex:
+        return ex.to_response()
+
+
+
 @shopping_list_blueprint.route('/add', methods=['POST'])
 def add() -> Response:
     try:

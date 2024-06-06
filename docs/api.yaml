@@ -57,6 +57,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /shopping-list/{shopping-list-id}:
+    get:
+      summary: Get shopping list.
+      operationId: addShoppingList
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: shopping-list-id
+          description: Get shoppint list by id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Shopping list successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingList'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /shopping-list/add:
     post:
       summary: Add new shopping list.

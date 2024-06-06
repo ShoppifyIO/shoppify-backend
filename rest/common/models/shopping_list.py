@@ -19,9 +19,11 @@ class ShoppingList:
     update_date: datetime
     updated_by: int
     is_completed: bool
-    items: List[ShoppingItem]
 
+    items: List[ShoppingItem]
     items_loaded: bool
+
+
 
     def __init__(self, shopping_list_id: int, init_children: bool = True):
         self.id = shopping_list_id
@@ -78,3 +80,7 @@ class ShoppingList:
         self.update_date = row['update_date']
         self.updated_by = row['updated_by']
         self.is_completed = row['is_completed']
+
+    @staticmethod
+    def verify_authorisation(logged_user_id: int, shopping_list_id: int) -> None:
+        pass
