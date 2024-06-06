@@ -20,11 +20,11 @@ end;
 $BODY$
 language plpgsql;
 
-create or replace trigger guard_shopping_list
+create or replace trigger guard_shopping_list_insert
     before insert on shopping_lists
     for each row execute procedure guard_shopping_list();
 
-create or replace trigger guard_shopping_list
+create or replace trigger guard_shopping_list_update
     before update on shopping_lists
     for each row execute procedure guard_shopping_list();
 

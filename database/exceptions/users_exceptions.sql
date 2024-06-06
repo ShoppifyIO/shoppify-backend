@@ -29,3 +29,11 @@ $$ language plpgsql;
 create or replace function throw.user_not_found() returns void as $$
 begin raise exception 'Nie znaleziono podanego użytkownika' using errcode = 'U0008'; end;
 $$ language plpgsql;
+
+create or replace function throw.relationship_already_exists() returns void as $$
+begin raise exception 'Już jesteś znajomy z tym użytkownikiem' using errcode = 'U0009'; end;
+$$ language plpgsql;
+
+create or replace function throw.relationship_cannot_be_modified() returns void as $$
+begin raise exception 'Już jesteś znajomy z tym użytkownikiem' using errcode = 'U0010'; end;
+$$ language plpgsql;

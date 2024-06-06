@@ -53,3 +53,19 @@ comment on function add_user(text, text, text) is
 - U004 - Email is empty
 - U005 - Username is too long
 - U006 - Email is too long';
+
+
+create or replace function
+    add_friend(
+        p_asking_user_id integer,
+        p_asked_user_id integer
+    )
+returns void as $$
+begin
+
+    insert into user_relationships(user_1_id, user_2_id)
+    values (p_asking_user_id, p_asked_user_id);
+
+    raise notice 'Friend added successfully';
+end
+$$ language plpgsql;

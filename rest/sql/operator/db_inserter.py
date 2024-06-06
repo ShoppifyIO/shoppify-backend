@@ -1,5 +1,9 @@
+from psycopg2.extras import RealDictRow
+
+from rest.common.exceptions.not_found_exception import NotFoundException
 from rest.sql.operator.db_operator import DBOperator
 from rest.sql.proc_return_type import ProcReturnType
+from rest.sql.query_return_type import QueryReturnType
 
 
 class DBInserter(DBOperator):
@@ -12,6 +16,28 @@ class DBInserter(DBOperator):
             'add_user',
             [username, email, password],
             ProcReturnType.ID,
+            self._is_transaction_mode
+        )
+
+    @staticmethod
+    def db_insert_friend(logged_user: int, username: str) -> None:
+        return DBInserter().insert_friend(logged_user, username)
+
+    def insert_friend(self, logged_user: int, username: str) -> None:
+        friend: RealDictRow | None = self._db_connection.call_query(
+            'SELECT id FROM users WHERE username = %s',
+            (username,),
+            QueryReturnType.ROW
+        )
+
+        if friend is None:
+            raise NotFoundException('Użytkownika', username)
+
+        friend_id: int = friend['id']
+        self._db_connection.call_procedure(
+            'add_friend',
+            [logged_user, friend_id],
+            ProcReturnType.NONE,
             self._is_transaction_mode
         )
 

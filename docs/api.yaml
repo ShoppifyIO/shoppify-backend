@@ -319,6 +319,74 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /friends/add:
+    put:
+      summary: Add new friend.
+      operationId: addFriend
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendAdd'
+      responses:
+        201:
+          description: Friend successfully added.
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /friends:
+    get:
+      summary: Gets user friends.
+      operationId: listFriends
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: User friends successfully downloaded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     JWT:
@@ -360,6 +428,15 @@ components:
           type: string
           description: The user's password.
           example: '123456'
+    FriendAdd:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Username of the new friend.
+          example: "Mario"
     UserLoginRequest:
       type: object
       required:
