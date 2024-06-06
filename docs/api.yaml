@@ -217,7 +217,7 @@ components:
         shopping_items:
           type: array
           items:
-            $ref: '#components/schemas/ShoppingItemAdd'
+            $ref: '#/components/schemas/ShoppingItemAdd'
     ShoppingItemAdd:
       type: object
       required:
