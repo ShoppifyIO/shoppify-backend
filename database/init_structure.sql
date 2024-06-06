@@ -39,8 +39,8 @@ create table if not exists shopping_list_items (
     category_id integer null references categories (id),
     name varchar(200) not null,
     quantity integer null,
-    is_completed boolean not null,
-    added_date timestamp with time zone not null,
+    is_completed boolean not null default false,
+    added_date timestamp with time zone not null default now(),
     added_by integer not null references users (id),
     completion_date timestamp with time zone null,
     completed_by integer null references users (id)

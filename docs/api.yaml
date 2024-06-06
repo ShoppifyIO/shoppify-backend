@@ -204,6 +204,7 @@ components:
       type: object
       required:
         - title
+        - shopping_items
       properties:
         title:
           type: string
@@ -213,6 +214,27 @@ components:
           type: integer
           description: The ID of the category.
           example: 1
+        shopping_items:
+          type: array
+          items:
+            $ref: '#components/schemas/ShoppingItemAdd'
+    ShoppingItemAdd:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the shopping item.
+          example: "Milk"
+        quantity:
+          type: integer
+          description: Quantity of the item
+          example: 1
+        category_id:
+          type: integer
+          description: ID of the category assigned to the item.
+          example: 12
     ShoppingList:
       type: object
       properties:

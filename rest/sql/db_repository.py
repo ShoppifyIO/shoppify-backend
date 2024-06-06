@@ -16,15 +16,6 @@ def get_db_connection() -> DBConnection:
     return DBConnection(db_name, db_user, db_password, db_host)
 
 
-def call_procedure(
-    proc_name: str,
-    proc_params: List[Any],
-    return_type: ProcReturnType
-) -> Tuple[Any] | int | None:
-    conn: DBConnection = get_db_connection()
-    return conn.call_procedure(proc_name, proc_params, return_type)
-
-
 def call_query(
         query: str,
         params: Tuple[Any],

@@ -1,6 +1,7 @@
 from typing import Set, List, Any, Tuple
 import psycopg2
 from psycopg2.extras import RealDictCursor, RealDictRow
+from psycopg2.extensions import connection
 
 from rest.common.exceptions.sql_exception import SqlException
 from rest.sql.proc_return_type import ProcReturnType
@@ -15,25 +16,47 @@ class DBConnection:
     password: str
     host: str
 
+    __connection: connection | None
+
     def __init__(self, name: str, user: str, password: str, host: str):
         self.name = name
         self.user = user
         self.password = password
         self.host = host
 
+        self.__connection = None
+
+    def commit_open_transaction(self):
+        if self.__connection is None:
+            raise 'Connection is not open'
+
+        self.__connection.commit()
+        self.__connection.close()
+
+    def rollback_open_transaction(self):
+        if self.__connection is None:
+            raise 'Connection is not open'
+
+        self.__connection.rollback()
+        self.__connection.close()
+
     def call_procedure(
             self,
             procname: str,
             proc_params: List[Any],
-            return_type: ProcReturnType
+            return_type: ProcReturnType,
+            keep_transaction: bool = False,
     ) -> Tuple[Any] | int | None:
-        conn = self.__create_connection()
-        cur = conn.cursor()
+        if self.__connection is None:
+            self.__connection = self.__create_connection()
+        cur = self.__connection.cursor()
 
         try:
             cur.callproc(procname, proc_params)
             result = cur.fetchone()
-            conn.commit()
+
+            if not keep_transaction:
+                self.__connection.commit()
 
             if return_type == ProcReturnType.ID:
                 return result[0]
@@ -43,10 +66,13 @@ class DBConnection:
 
             return None
         except psycopg2.Error as e:
+            self.__connection.rollback()
             self.__handle_db_exception(e)
         finally:
             cur.close()
-            conn.close()
+
+            if not keep_transaction:
+                self.__connection.close()
 
     def call_query(
             self,

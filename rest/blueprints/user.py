@@ -6,9 +6,7 @@ from rest.common.auth.token import create_token
 from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
 from rest.common.response import respond_created, respond
-from rest.sql.db_connection import ProcReturnType, DBConnection
-from rest.sql.db_repository import get_db_connection, call_procedure
-from rest.sql.procedures import db_login
+from rest.sql.db_operator import DBOperator
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -22,11 +20,7 @@ def register() -> Response:
         email: str = extractor.str_required('email')
         password: str = extractor.str_required('password')
 
-        user_id: int = call_procedure(
-            'add_user',
-            [username, email, password],
-            ProcReturnType.ID
-        )
+        user_id: int = DBOperator.db_add_user(username, email, password)
 
         return respond_created({
             'id': user_id,
@@ -45,7 +39,7 @@ def login() -> Response:
         username: str = extractor.str_required('username')
         password: str = extractor.str_required('password')
 
-        user: Dict[str, Any] = db_login(username, password)
+        user: Dict[str, Any] = DBOperator.db_login(username, password)
 
         token: str = create_token(user['id'])
 

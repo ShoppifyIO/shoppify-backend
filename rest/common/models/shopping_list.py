@@ -6,6 +6,7 @@ from psycopg2.extras import RealDictRow
 
 from rest.common.dates import datetime_to_string
 from rest.common.exceptions.not_found_exception import NotFoundException
+from rest.common.models.shopping_item import ShoppingItem
 from rest.sql.db_repository import call_query
 
 
@@ -18,10 +19,18 @@ class ShoppingList:
     update_date: datetime
     updated_by: int
     is_completed: bool
+    items: List[ShoppingItem]
 
-    def __init__(self, shopping_list_id: int):
+    items_loaded: bool
+
+    def __init__(self, shopping_list_id: int, init_children: bool = True):
         self.id = shopping_list_id
         self.__load_db()
+
+        self.items_loaded = False
+        self.items = []
+        if init_children:
+            self.load_items()
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -34,6 +43,24 @@ class ShoppingList:
             'is_completed': self.is_completed,
             'category': None
         }
+
+    def to_dict_with_children(self) -> Dict[str, Any]:
+        self.load_items()
+
+        dictionary: Dict[str, Any] = self.to_dict()
+        dictionary['shopping_items'] = []
+
+        for item in self.items:
+            dictionary['shopping_items'].append(item.to_dict())
+
+        return dictionary
+
+    def load_items(self) -> None:
+        if self.items_loaded:
+            return
+
+        self.items_loaded = True
+        self.items = ShoppingItem.load_by_shopping_list(self.id)
 
     def __load_db(self) -> None:
         row: RealDictRow | None = call_query(
