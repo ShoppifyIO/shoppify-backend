@@ -67,8 +67,22 @@ class ShoppingListHeader:
             QueryReturnType.LIST
         )
 
+        return ShoppingListHeader.__create_objects_from_query(headers)
+
+    @staticmethod
+    def load_archived_shopping_list_headers(user_id: int) -> List[ShoppingListHeader]:
+        headers: List[RealDictRow] = call_query(
+            'SELECT * FROM archived_shopping_lists WHERE user_id = %s',
+            (user_id,),
+            QueryReturnType.LIST
+        )
+
+        return ShoppingListHeader.__create_objects_from_query(headers)
+
+    @staticmethod
+    def __create_objects_from_query(query_headers: List[RealDictRow]) -> List[ShoppingListHeader]:
         shopping_list_headers: List[ShoppingListHeader] = []
-        for header in headers:
+        for header in query_headers:
             shopping_list_headers.append(ShoppingListHeader(
                 header['shopping_list_id'],
                 header['title'],

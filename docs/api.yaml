@@ -82,6 +82,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: Not found, specified resource not found.
           content:
@@ -104,14 +110,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ShoppingListHeader'
-        400:
-          description: Bad request.
+        401:
+          description: Not Authorised.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        404:
-          description: Not found, specified resource not found.
+  /shopping-list/archive:
+    get:
+      summary: Archive a shopping list.
+      operationId: archiveShoppingList
+      security:
+        - JWT: [ ]
+      responses:
+        200:
+          description: Shopping list successfully archived.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingList'
+        401:
+          description: Not Authorised.
           content:
             application/json:
               schema:
