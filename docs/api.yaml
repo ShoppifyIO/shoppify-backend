@@ -95,6 +95,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /shopping-list/modify:
+    post:
+      summary: Modify shopping list and its items.
+      operationId: modifyShoppingList
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListModify'
+      responses:
+        200:
+          description: Shopping list successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingList'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /shopping-list/active:
     get:
       summary: Get active shopping lists.
@@ -235,6 +273,68 @@ components:
           type: integer
           description: ID of the category assigned to the item.
           example: 12
+    ShoppingItemModify:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: ID of the modified shopping item.
+          example: 1
+        name:
+          type: string
+          description: The new name of the modified shopping item.
+          example: "Bread"
+        category_id:
+          type: integer
+          description: New category ID.
+          example: 1
+        quantity:
+          type: integer
+          description: New quantity.
+          example: 3
+    ShoppingItemDelete:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: ID of the shopping item to be deleted.
+          example: 1
+    ShoppingListModify:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: ID of the modified shopping list.
+          example: 1
+        title:
+          type: string
+          description: New title of the shopping list.
+          example: "Utilities"
+        category_id:
+          type: integer
+          description: New category assigned to the shopping list.
+          example: 1
+        new_shopping_items:
+          type: array
+          description: List of shopping items to add to the shopping list.
+          items:
+            $ref: '#/components/schemas/ShoppingItemAdd'
+        modified_shopping_items:
+          type: array
+          description: List of shopping items that exist in the shopping list to modify.
+          items:
+            $ref: '#/components/schemas/ShoppingItemModify'
+        deleted_shopping_items:
+          type: array
+          description: List of shopping items that exist in the shopping list to be deleted.
+          items:
+            $ref: '#/components/schemas/ShoppingItemDelete'
     ShoppingList:
       type: object
       properties:

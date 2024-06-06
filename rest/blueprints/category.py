@@ -4,7 +4,7 @@ from rest.common.auth.token import handle_request_token
 from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
 from rest.common.response import respond_created
-from rest.sql.db_operator import DBOperator
+from rest.sql.operator.db_operator import DBOperator
 
 category_blueprint = Blueprint('category', __name__)
 

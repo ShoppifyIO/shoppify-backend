@@ -7,7 +7,7 @@ begin
         perform throw.user_not_found();
     end if;
 
-    if not exists (select 1 from categories where id = new.category_id) then
+    if new.category_id is not null and not exists (select 1 from categories where id = new.category_id) then
         perform throw.category_not_found();
     end if;
 
