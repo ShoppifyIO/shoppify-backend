@@ -213,6 +213,112 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /categories/add:
+    post:
+      summary: Add new category.
+      operationId: addCategory
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryAdd'
+      responses:
+        200:
+          description: Category successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /categories/list:
+    get:
+      summary: Gets user shopping list categories.
+      operationId: listCategories
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Shopping list categories successfully downloaded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /categories/item:
+    get:
+      summary: Load user item categories.
+      operationId: itemCategories
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Shopping item categories successfully downloaded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     JWT:
@@ -441,6 +547,27 @@ components:
           type: boolean
           description: Whether the user is the owner of the shopping list.
           example: true
+    CategoryAdd:
+      type: object
+      required:
+        - title
+        - type
+        - color
+      properties:
+        title:
+          type: string
+          description: Title of the new category.
+          example: "Sweets"
+        type:
+          $ref: "#/components/schemas/CategoryType"
+        description:
+          type: string
+          description: Description of the new category.
+          example: "Only sweet stuff"
+        color:
+          type: string
+          description: Category color.
+          example: '#ffffff'
     Category:
       type: object
       properties:
@@ -453,9 +580,7 @@ components:
           description: The ID of the owner.
           example: 1
         type:
-          type: string
-          description: The type of the category.
-          example: "Food"
+          $ref: '#/components/schemas/CategoryType'
         title:
           type: string
           description: The title of the category.
@@ -464,6 +589,10 @@ components:
           type: string
           description: The description of the category.
           example: "Items to buy for daily meals."
+        color:
+          type: string
+          description: Color of the category.
+          example: '#ffffff'
     Error:
       type: object
       properties:
@@ -471,3 +600,10 @@ components:
           type: string
           description: The error message.
           example: One or more parameters are empty or missing.
+
+    CategoryType:
+      type: string
+      description: "Enum Category object types"
+      enum:
+        - ShoppingList
+        - Item

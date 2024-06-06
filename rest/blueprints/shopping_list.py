@@ -31,7 +31,6 @@ def get(shopping_list_id: int) -> Response:
         return ex.to_response()
 
 
-
 @shopping_list_blueprint.route('/add', methods=['POST'])
 def add() -> Response:
     try:

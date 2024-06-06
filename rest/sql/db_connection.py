@@ -95,7 +95,7 @@ class DBConnection:
     def call_query(
             self,
             query: str,
-            params: Tuple[Any],
+            params: Tuple[Any, ...],
             query_return_type: QueryReturnType
     ) -> None | RealDictRow | list[RealDictRow]:
         conn = self.__create_connection()

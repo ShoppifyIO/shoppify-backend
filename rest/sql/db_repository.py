@@ -18,7 +18,7 @@ def get_db_connection() -> DBConnection:
 
 def call_query(
         query: str,
-        params: Tuple[Any],
+        params: Tuple[Any, ...],
         return_type: QueryReturnType = QueryReturnType.ROW
 ) -> None | RealDictRow | list[RealDictRow]:
     conn: DBConnection = get_db_connection()
