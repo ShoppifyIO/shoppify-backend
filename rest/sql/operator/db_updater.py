@@ -48,7 +48,7 @@ class DBUpdater(DBOperator):
 
     def change_completed_status_shopping_item(self, shopping_item_id: int, is_completed: bool) -> None:
         self.__begin_query('shopping_list_items')
-        self.__handle_query_param('added_by', self.__logged_user)
+        self.__handle_query_param('completed_by', self.__logged_user)
         self.__handle_query_param('is_completed', is_completed)
         self.__finish_and_run_query(shopping_item_id)
 
