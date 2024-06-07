@@ -57,7 +57,7 @@ create table if not exists list_sharings (
     user_relationship_id integer not null references user_relationships (id),
     shopping_list_id integer not null references shopping_lists (id),
     permission_level integer not null,
-    share_date timestamp with time zone not null
+    share_date timestamp with time zone not null default now()
 );
 
 

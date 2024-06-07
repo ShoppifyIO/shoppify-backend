@@ -133,6 +133,21 @@ def archive() -> Response:
         return abstract_exception.to_response()
 
 
+@shopping_list_blueprint.route('/share', methods=['POST'])
+def share() -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+        extractor: Extractor = Extractor(request.json)
+
+        shopping_list_id: int = extractor.int_required('shopping_list_id')
+        friend_id: int = extractor.int_required('friend_id')
+
+        DBInserter.db_share_shopping_list(logged_user, friend_id, shopping_list_id)
+        return respond(None, 200)
+    except AbstractException as aex:
+        return aex.to_response()
+
+
 def __add_new_shopping_items(
         shopping_items: List[Dict[str, Any]],
         db_inserter: DBInserter,

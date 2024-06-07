@@ -54,6 +54,18 @@ class DBInserter(DBOperator):
         )
 
     @staticmethod
+    def db_share_shopping_list(logged_user_id: int, friend_id: int, shopping_list_id: int) -> None:
+        return DBInserter().share_shopping_list(logged_user_id, friend_id, shopping_list_id)
+
+    def share_shopping_list(self, logged_user_id: int, friend_id: int, shopping_list_id: int) -> None:
+        return self._db_connection.call_procedure(
+            'share_shopping_list',
+            [logged_user_id, friend_id, shopping_list_id],
+            ProcReturnType.NONE,
+            self._is_transaction_mode
+        )
+
+    @staticmethod
     def db_insert_category(owner_id: int, cat_type: int, title: str, description: str, color: str) -> int:
         return DBInserter().insert_category(owner_id, cat_type, title, description, color)
 
