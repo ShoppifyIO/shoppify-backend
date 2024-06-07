@@ -8,6 +8,7 @@ from rest.common.json.extractor import Extractor
 from rest.common.models.shopping_list_header import ShoppingListHeader
 from rest.common.models.shopping_list import ShoppingList
 from rest.common.response import respond_created, respond, respond_deleted
+from rest.sql.operator import db_updater
 from rest.sql.operator.db_deleter import DBDeleter
 from rest.sql.operator.db_inserter import DBInserter
 from rest.sql.operator.db_updater import DBUpdater
@@ -152,9 +153,15 @@ def share() -> Response:
         extractor: Extractor = Extractor(request.json)
 
         shopping_list_id: int = extractor.int_required('shopping_list_id')
-        friend_id: int = extractor.int_required('friend_id')
+        db_inserter: DBInserter = DBInserter()
+        db_inserter.start_transaction()
 
-        DBInserter.db_share_shopping_list(logged_user, friend_id, shopping_list_id)
+        for friend_json in extractor.array_required('friend_ids'):
+            friend_extractor: Extractor = Extractor(friend_json)
+            friend_id: int = friend_extractor.int_required('friend_id')
+            db_inserter.share_shopping_list(logged_user, friend_id, shopping_list_id)
+
+        db_inserter.end_transaction()
         return respond(None, 200)
     except AbstractException as aex:
         return aex.to_response()

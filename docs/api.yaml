@@ -735,16 +735,24 @@ components:
       type: object
       required:
         - shopping_list_id
-        - friend_id
+        - friend_ids
       properties:
         shopping_list_id:
           type: integer
           description: ID shopping list to share.
           example: 1
-        friend_id:
-          type: integer
-          description: ID of friend to share.
-          example: 1
+        friend_ids:
+          type: array
+          description: IDs of friends to share.
+          items:
+            type: object
+            required:
+              - friend_id
+            properties:
+              friend_id:
+                type: integer
+                description: ID of friend to share.
+                example: 1
     ShoppingItemAdd:
       type: object
       required:
