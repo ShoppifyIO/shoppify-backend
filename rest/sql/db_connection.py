@@ -75,6 +75,9 @@ class DBConnection:
 
         try:
             cur.execute(f'DELETE FROM {table_name} WHERE id = %s', (object_id,))
+
+            if not keep_transaction:
+                self.__connection.commit()
         except psycopg2.Error as e:
             self.__connection.rollback()
             self.__handle_db_exception(e)
@@ -86,6 +89,9 @@ class DBConnection:
 
         try:
             cur.execute(query, params)
+
+            if not keep_transaction:
+                self.__connection.commit()
         except psycopg2.Error as e:
             self.__connection.rollback()
             self.__handle_db_exception(e)

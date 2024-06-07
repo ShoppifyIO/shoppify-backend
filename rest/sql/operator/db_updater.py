@@ -23,6 +23,12 @@ class DBUpdater(DBOperator):
         self.__handle_query_param('category_id', new_category_id)
         self.__finish_and_run_query(shopping_list_id)
 
+    def change_completed_status_shopping_list(self, shopping_list_id: int, is_completed: bool) -> None:
+        self.__begin_query('shopping_lists')
+        self.__handle_query_param('updated_by', self.__logged_user)
+        self.__handle_query_param('is_completed', is_completed)
+        self.__finish_and_run_query(shopping_list_id)
+
     def update_shopping_item(
             self,
             shopping_item_id: int,
@@ -38,6 +44,12 @@ class DBUpdater(DBOperator):
         self.__handle_query_param('name', new_name)
         self.__handle_query_param('category_id', new_category_id)
         self.__handle_query_param('quantity', new_quantity)
+        self.__finish_and_run_query(shopping_item_id)
+
+    def change_completed_status_shopping_item(self, shopping_item_id: int, is_completed: bool) -> None:
+        self.__begin_query('shopping_list_items')
+        self.__handle_query_param('added_by', self.__logged_user)
+        self.__handle_query_param('is_completed', is_completed)
         self.__finish_and_run_query(shopping_item_id)
 
     def __begin_query(self, table_name: str) -> None:

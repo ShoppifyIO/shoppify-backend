@@ -148,6 +148,30 @@ def share() -> Response:
         return aex.to_response()
 
 
+@shopping_list_blueprint.route('/complete/<shopping_list_id>', methods=['POST'])
+def complete(shopping_list_id: int) -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+        ShoppingList.verify_authorisation(logged_user, shopping_list_id)
+        db_updater: DBUpdater = DBUpdater(logged_user)
+        db_updater.change_completed_status_shopping_list(shopping_list_id, True)
+        return respond(ShoppingList(shopping_list_id).to_dict_with_children(), 200)
+    except AbstractException as aex:
+        return aex.to_response()
+
+
+@shopping_list_blueprint.route('/incomplete/<shopping_list_id>', methods=['POST'])
+def incomplete(shopping_list_id: int) -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+        ShoppingList.verify_authorisation(logged_user, shopping_list_id)
+        db_updater: DBUpdater = DBUpdater(logged_user)
+        db_updater.change_completed_status_shopping_list(shopping_list_id, False)
+        return respond(ShoppingList(shopping_list_id).to_dict_with_children(), 200)
+    except AbstractException as aex:
+        return aex.to_response()
+
+
 def __add_new_shopping_items(
         shopping_items: List[Dict[str, Any]],
         db_inserter: DBInserter,

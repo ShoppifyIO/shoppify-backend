@@ -66,7 +66,7 @@ paths:
       parameters:
         - in: path
           name: shopping-list-id
-          description: Get shoppint list by id
+          description: Shopping List ID.
           required: true
           schema:
             type: integer
@@ -149,6 +149,84 @@ paths:
       responses:
         200:
           description: Shopping list successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingList'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /shopping-list/complete/{shopping-list-id}:
+    post:
+      summary: Mark shopping list as completed.
+      operationId: completeShoppingList
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: shopping-list-id
+          description: Shopping List ID.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Shopping list successfully marked as completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingList'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /shopping-list/incomplete/{shopping-list-id}:
+    post:
+      summary: Mark shopping list as incomplete.
+      operationId: incompleteShoppingList
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: shopping-list-id
+          description: Shopping List ID.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Shopping list successfully marked as incomplete.
           content:
             application/json:
               schema:
