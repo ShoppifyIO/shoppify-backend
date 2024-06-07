@@ -20,6 +20,23 @@ end;
 $BODY$
 language plpgsql;
 
+create or replace function
+    delete_sharings_on_delete()
+returns trigger as
+$BODY$
+begin
+    DELETE FROM shopping_list_items WHERE shopping_list_id = old.id;
+    DELETE FROM list_sharings WHERE shopping_list_id = old.id;
+
+    return old;
+end;
+$BODY$
+language plpgsql;
+
+create or replace trigger delete_sharings_on_delete_list
+    before delete on shopping_lists
+    for each row execute procedure delete_sharings_on_delete();
+
 create or replace trigger guard_shopping_list_insert
     before insert on shopping_lists
     for each row execute procedure guard_shopping_list();

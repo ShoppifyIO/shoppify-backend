@@ -86,3 +86,7 @@ class Category:
         self.title = row['title']
         self.description = row['description']
         self.color = row['color']
+
+    @staticmethod
+    def verify_authorization(logged_user_id: int, category_id: int) -> None:
+        pass

@@ -7,7 +7,7 @@ from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
 from rest.common.models.shopping_list_header import ShoppingListHeader
 from rest.common.models.shopping_list import ShoppingList
-from rest.common.response import respond_created, respond
+from rest.common.response import respond_created, respond, respond_deleted
 from rest.sql.operator.db_deleter import DBDeleter
 from rest.sql.operator.db_inserter import DBInserter
 from rest.sql.operator.db_updater import DBUpdater
@@ -105,6 +105,18 @@ def modify() -> Response:
         return respond(modified_shopping_list.to_dict_with_children(), 200)
     except AbstractException as abstract_exception:
         return abstract_exception.to_response()
+
+
+@shopping_list_blueprint.route('/delete/<shopping_list_id>', methods=['DELETE'])
+def delete(shopping_list_id: int) -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+        ShoppingList.verify_authorisation(logged_user, shopping_list_id)
+        db_deleter: DBDeleter = DBDeleter()
+        db_deleter.delete_shopping_list(shopping_list_id)
+        return respond_deleted()
+    except AbstractException as aex:
+        aex.to_response()
 
 
 @shopping_list_blueprint.route('/active', methods=['GET'])

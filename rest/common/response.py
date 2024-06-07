@@ -10,6 +10,10 @@ def respond_created(data: JsonType) -> Response:
     return respond(data, 201)
 
 
+def respond_deleted() -> Response:
+    return respond(None, 204)
+
+
 def respond(
         data: JsonType,
         status: int,

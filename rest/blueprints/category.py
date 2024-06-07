@@ -7,7 +7,8 @@ from rest.common.exceptions.abstract_exception import AbstractException
 from rest.common.json.extractor import Extractor
 from rest.common.models.category import Category
 from rest.common.models.enums.category_type import CategoryType
-from rest.common.response import respond_created, respond
+from rest.common.response import respond_created, respond, respond_deleted
+from rest.sql.operator.db_deleter import DBDeleter
 from rest.sql.operator.db_inserter import DBInserter
 
 category_blueprint = Blueprint('category', __name__)
@@ -30,6 +31,18 @@ def add_category() -> Response:
         return respond_created(category.to_dict())
     except AbstractException as abstract_exception:
         return abstract_exception.to_response()
+
+
+@category_blueprint.route('/delete/<category_id>', methods=['DELETE'])
+def delete_category(category_id: int) -> Response:
+    try:
+        logged_user: int = handle_request_token(request)
+        Category.verify_authorization(logged_user, category_id)
+        db_deleter: DBDeleter = DBDeleter()
+        db_deleter.delete_category(category_id)
+        return respond_deleted()
+    except AbstractException as aex:
+        return aex.to_response()
 
 
 @category_blueprint.route('/list', methods=['GET'])
