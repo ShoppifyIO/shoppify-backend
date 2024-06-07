@@ -3,7 +3,7 @@ SELECT
     sl.id AS shopping_list_id,            -- Identyfikator listy zakupów
     sl.title AS title,                    -- Tytuł listy zakupów
     sl.creation_date as creation_date,
-    sl.update_date AS update_date,        -- Data ostatniej aktualizacji
+    coalesce(sl.update_date, sl.creation_date) AS update_date,        -- Data ostatniej aktualizacji
     c.title AS category_name,             -- Nazwa kategorii
     c.color AS category_color,            -- Kolor kategorii
     u.username AS updated_by,             -- Kto ostatnio zaktualizował
@@ -26,4 +26,6 @@ LEFT JOIN
 LEFT JOIN
     user_relationships ur ON ls.user_relationship_id = ur.id
 WHERE
-    sl.is_completed = true;               -- Warunek, aby lista była zarchiwizowana (zakończona)
+    sl.is_completed = true -- Warunek, aby lista była zarchiwizowana (zakończona)
+ORDER BY
+    sl.update_date desc;
