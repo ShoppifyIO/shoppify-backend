@@ -6,6 +6,7 @@ from psycopg2.extras import RealDictRow
 
 from rest.common.dates import datetime_to_string
 from rest.common.exceptions.not_found_exception import NotFoundException
+from rest.common.models.category import Category
 from rest.common.models.shopping_item import ShoppingItem
 from rest.sql.db_repository import call_query
 
@@ -13,7 +14,7 @@ from rest.sql.db_repository import call_query
 class ShoppingList:
     id: int
     owner_id: int
-    category_id: int | None
+    category: Category | None
     title: str
     creation_date: datetime
     update_date: datetime
@@ -22,8 +23,6 @@ class ShoppingList:
 
     items: List[ShoppingItem]
     items_loaded: bool
-
-
 
     def __init__(self, shopping_list_id: int, init_children: bool = True):
         self.id = shopping_list_id
@@ -43,7 +42,7 @@ class ShoppingList:
             'update_date': datetime_to_string(self.update_date),
             'updated_by': self.updated_by,
             'is_completed': self.is_completed,
-            'category': None
+            'category': None if self.category is None else self.category.to_dict(),
         }
 
     def to_dict_with_children(self) -> Dict[str, Any]:
@@ -74,12 +73,12 @@ class ShoppingList:
             raise NotFoundException('listy zakupów', self.id)
 
         self.owner_id = row['owner_id']
-        self.category_id = row['category_id']
         self.title = row['title']
         self.creation_date = row['creation_date']
         self.update_date = row['update_date']
         self.updated_by = row['updated_by']
         self.is_completed = row['is_completed']
+        self.category = None if row['category_id'] is None else Category(row['category_id'])
 
     @staticmethod
     def verify_authorisation(logged_user_id: int, shopping_list_id: int) -> None:
