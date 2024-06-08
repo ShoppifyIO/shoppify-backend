@@ -8,7 +8,7 @@ from rest.common.exceptions.sql_exception import SqlException
 from rest.sql.proc_return_type import ProcReturnType
 from rest.sql.query_return_type import QueryReturnType
 
-custom_error_letters: Set[str] = {'U'}
+custom_error_letters: Set[str] = {'U', 'S', 'C'}
 
 
 class DBConnection:

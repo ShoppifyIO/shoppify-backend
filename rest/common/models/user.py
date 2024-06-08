@@ -15,7 +15,9 @@ class User:
 
     def __init__(self, user_id: int, load: bool = True):
         self.id = user_id
-        self.__load_db()
+
+        if load:
+            self.__load_db()
 
     def to_dict(self) -> Dict[str, Any]:
         return {

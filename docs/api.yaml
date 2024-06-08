@@ -57,6 +57,78 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /user/items:
+    get:
+      summary: Gets all user items of the logged user.
+      operationId: getUserItems
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Shopping list successfully created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserItem'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/items/add:
+    post:
+      summary: Add new user item.
+      operationId: addUserItem
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserItemAdd'
+      responses:
+        201:
+          description: Shopping list successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        400:
+          description: Bad request, one or more parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Not Authorised.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found, specified resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /shopping-list/{shopping-list-id}:
     get:
       summary: Get shopping list.
@@ -662,6 +734,38 @@ components:
           type: string
           description: The user's email address.
           example: johndoe@example.com
+    UserItemAdd:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the user item.
+          example: "Milk"
+        category_id:
+          type: integer
+          description: ID of the user item category.
+          example: 1
+    UserItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User item ID.
+          example: 1
+        owner_id:
+          type: integer
+          description: ID of the owner of the item.
+          example: 1
+        name:
+          type: string
+          description: Name of the user item.
+          example: "Milk"
+        category_id:
+          type: integer
+          description: ID of the user item category.
+          example: 1
     RegisterUser:
       type: object
       required:

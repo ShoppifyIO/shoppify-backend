@@ -101,3 +101,14 @@ class DBInserter(DBOperator):
             ProcReturnType.ID,
             self._is_transaction_mode
         )
+
+    @staticmethod
+    def db_insert_user_item(owner_id: int, category_id: int, name: str) -> int:
+        return DBInserter().insert_user_item(owner_id, category_id, name)
+
+    def insert_user_item(self, owner_id: int, category_id: int, name: str) -> int:
+        return self._db_connection.call_procedure(
+            'add_user_item',
+            [owner_id, category_id, name],
+            ProcReturnType.ID,
+        )
