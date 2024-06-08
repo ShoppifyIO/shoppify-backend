@@ -68,4 +68,4 @@ begin
 
     raise notice 'Friend added successfully';
 end
-$$ language plpgsql;
+$$ LANGUAGE plpgsql VOLATILE;

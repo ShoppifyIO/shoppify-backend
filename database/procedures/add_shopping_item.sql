@@ -16,4 +16,6 @@ begin
 
     return v_shopping_item_id;
 end;
-$$ language plpgsql;
+$$ LANGUAGE plpgsql VOLATILE;
+
+

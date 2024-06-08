@@ -58,4 +58,4 @@ begin
 
     raise notice 'Successfully shared shopping list';
 end
-$$ language plpgsql;
+$$ LANGUAGE plpgsql VOLATILE;

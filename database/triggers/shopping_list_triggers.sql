@@ -33,6 +33,17 @@ end;
 $BODY$
 language plpgsql;
 
+create or replace function
+    fill_update_date()
+returns trigger as
+$BODY$
+begin
+    new.update_date = now();
+    return new;
+end;
+$BODY$
+language plpgsql;
+
 create or replace trigger delete_sharings_on_delete_list
     before delete on shopping_lists
     for each row execute procedure delete_sharings_on_delete();

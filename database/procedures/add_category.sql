@@ -15,4 +15,6 @@ BEGIN
 
     RETURN v_category_id;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql VOLATILE;
+
+

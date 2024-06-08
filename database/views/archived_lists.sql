@@ -26,6 +26,4 @@ LEFT JOIN
 LEFT JOIN
     user_relationships ur ON ls.user_relationship_id = ur.id
 WHERE
-    sl.is_completed = true -- Warunek, aby lista była zarchiwizowana (zakończona)
-ORDER BY
-    sl.update_date desc;
+    sl.is_completed = true; -- Warunek, aby lista była zarchiwizowana (zakończona)

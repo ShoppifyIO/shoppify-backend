@@ -71,7 +71,7 @@ class ShoppingListHeader:
     @staticmethod
     def load_active_shopping_list_headers(user_id: int) -> List[ShoppingListHeader]:
         headers: List[RealDictRow] = call_query(
-            'SELECT * FROM active_shopping_lists WHERE user_id = %s',
+            'SELECT * FROM active_shopping_lists WHERE user_id = %s ORDER BY update_date DESC',
             (user_id,),
             QueryReturnType.LIST
         )
@@ -81,7 +81,7 @@ class ShoppingListHeader:
     @staticmethod
     def load_archived_shopping_list_headers(user_id: int) -> List[ShoppingListHeader]:
         headers: List[RealDictRow] = call_query(
-            'SELECT * FROM archived_shopping_lists WHERE user_id = %s',
+            'SELECT * FROM archived_shopping_lists WHERE user_id = %s ORDER BY update_date DESC',
             (user_id,),
             QueryReturnType.LIST
         )

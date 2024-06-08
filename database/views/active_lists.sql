@@ -26,6 +26,4 @@ LEFT JOIN
 LEFT JOIN
     user_relationships ur ON ls.user_relationship_id = ur.id
 WHERE
-    sl.is_completed = false
-ORDER BY
-    sl.update_date desc;
+    sl.is_completed = false;
